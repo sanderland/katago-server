@@ -5,7 +5,8 @@ Base settings to build other settings files upon.
 import environ
 
 ROOT_DIR = environ.Path(__file__) - 3  # (src/settings/base.py - 3 = src/)
-APPS_DIR = ROOT_DIR.path("src")
+SRC_DIR = ROOT_DIR.path("src")
+APPS_DIR = SRC_DIR.path("apps")
 
 env = environ.Env()
 
@@ -70,6 +71,7 @@ THIRD_PARTY_APPS = [
     "solo",
     "django_filters",
     "drf_yasg",
+    'webpack_loader'
 ]
 
 LOCAL_APPS = [
@@ -144,7 +146,9 @@ STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [str(APPS_DIR.path("frontend/static"))]
+STATICFILES_DIRS = (
+    ("bundles", str(SRC_DIR.path("frontend/dist"))),
+)
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -154,7 +158,7 @@ STATICFILES_FINDERS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(APPS_DIR("media"))
+MEDIA_ROOT = str(SRC_DIR("media"))
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
@@ -166,7 +170,7 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        "DIRS": [str(APPS_DIR.path("frontend/templates"))],
+        "DIRS": [str(SRC_DIR.path("templates"))],
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
@@ -181,18 +185,31 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "src.frontend.utils.context_processors.settings_context",
+                "src.utils.context_processors.settings_context",
             ],
         },
     }
 ]
+
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'bundles/',  # must end with slash
+        'STATS_FILE': str(SRC_DIR.path("frontend/webpack-stats.json")),
+        "POLL_INTERVAL": 0.1,
+        "TIMEOUT": None,
+        "IGNORE": [r".+\.hot-update.js", r".+\.map"],
+    }
+}
+
 # http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # FIXTURES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#fixture-dirs
-FIXTURE_DIRS = (str(APPS_DIR.path("fixtures")),)
+FIXTURE_DIRS = (str(SRC_DIR.path("fixtures")),)
 
 # SECURITY
 # ------------------------------------------------------------------------------

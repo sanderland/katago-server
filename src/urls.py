@@ -66,7 +66,7 @@ api_swagger = [
 urlpatterns = (
     api_url_pattern
     + [
-        path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+        path("", TemplateView.as_view(template_name="application.html"), name="app", ),
         path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about", ),
         # Django Admin, use {% url 'admin:index' %}
         path(settings.ADMIN_URL, admin.site.urls),
@@ -89,6 +89,7 @@ if settings.DEBUG:
         path("404/", default_views.page_not_found, kwargs={"exception": Exception("Page not Found")},),
         path("500/", default_views.server_error),
     ]
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
 

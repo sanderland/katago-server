@@ -1,0 +1,29 @@
+{
+  "name": "katago-frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "buefy": "^0.9.3",
+    "vue": "^2.6.12",
+    "webpack-bundle-tracker": "0.4.3"
+  },
+  "peerDependencies": {
+    "vue-template-compiler": "^2.0.0"
+  },
+  "devDependencies": {
+    "css-loader": "^4.3.0",
+    "file-loader": "^6.1.0",
+    "mini-css-extract-plugin": "^0.11.2",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "vue-loader": "^15.9.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "yarn": "^1.22.5"
+  },
+  "scripts": {
+    "dev": "webpack --mode development --env dev --watch"
+  }
+}
